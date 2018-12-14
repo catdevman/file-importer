@@ -31,6 +31,7 @@ type StaffManagerSuiteWithErrs struct {
 
 func (suite *StaffTestSuite) SetupTest() {
 	err := faker.FakeData(&suite.staff)
+	suite.staff.Level = "admin"
 	if err != nil {
 		panic(err)
 	}
@@ -59,10 +60,11 @@ func (suite *StaffManagerSuite) SetupTest() {
 	var staff Staff
 	for i := 0; i < 10; i++ {
 		err := faker.FakeData(&staff)
+		staff.Level = "admin"
 		if err != nil {
 			panic(err)
 		}
-		suite.staffManager.SetData(append(suite.staffManager.ShowData(), staff))
+		suite.staffManager.SetData(append(suite.staffManager.Data(), staff))
 	}
 }
 
@@ -128,7 +130,7 @@ func (s *StaffManagerSuiteWithErrs) TestLoadDataFromPath() {
 }
 
 func (suite *StaffManagerSuite) TestShowData() {
-	suite.NotEmpty(suite.staffManager.ShowData())
+	suite.NotEmpty(suite.staffManager.Data())
 }
 
 func TestStaffManagerSuite(t *testing.T) {

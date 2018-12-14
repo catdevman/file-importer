@@ -48,14 +48,13 @@ func main() {
 		errs = validator.ValidateCollection()
 	}
 
-	s, _ := json.Marshal(manager.ShowData())
+	s, _ := json.Marshal(manager.Data())
 	if s == nil {
 		fmt.Printf("%s\n", s)
 	}
 	if errs != nil {
 		fmt.Println(errs)
 	}
-
 }
 
 func getMysqlDatabaseConnection(dbUsername, dbPassword, dbHost, database string) (*sql.DB, error) {

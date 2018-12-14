@@ -6,7 +6,7 @@ import "io"
 type Manager interface {
 	SetData([]Data)
 	LoadDataFromReader(io.Reader) ([]Data, error)
-	ShowData() []Data
+	Data() []Data
 	ManagerValidator
 }
 
@@ -16,8 +16,8 @@ type Data interface {
 }
 
 type ErroredRecord struct {
-	Err []error
-	Data
+	Err  []error
+	Data Data
 }
 
 // ManagerValidator - This is responsible for the thing that validates the data in the manager

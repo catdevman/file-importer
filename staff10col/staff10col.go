@@ -16,6 +16,11 @@ var RequireUnicode = []validation.Rule{
 	validation.Match(regexp.MustCompile(`^[\d\p{L}\s’().'\-&",#_@+/]+$`)),
 }
 
+var LevelValidation = []validation.Rule{
+	validation.Required,
+	validation.Match(regexp.MustCompile(`^(teacher|superintendent|principal|super|admin|[2-4])$`)),
+}
+
 // Staff - this is the struct for a staff
 type Staff struct {
 	FirstName    string     `name:"FirstName" json:"firstName" faker:"first_name"`
@@ -45,6 +50,7 @@ func (s Staff) Validate() error {
 		validation.Field(&s.FirstName, RequireUnicode...),
 		validation.Field(&s.LastName, RequireUnicode...),
 		validation.Field(&s.Username, RequireUnicode...),
+		validation.Field(&s.Level, LevelValidation...),
 	)
 }
 
@@ -71,13 +77,17 @@ func (s Staff) Valid() []error {
 	if err := s.Email.Valid(); err != nil {
 		errs = append(errs, err)
 	}
+	if err := s.Validate(); err != nil {
+		errs = append(errs, err)
+	}
+
 	return errs
 }
 
 func (sm *StaffManager) ValidateCollection() []types.ErroredRecord {
 	for _, staff := range sm.data {
 		if errs := staff.(Staff).Valid(); errs != nil {
-			sm.erroredRecords = append(sm.erroredRecords, types.ErroredRecord{errs, staff.(Staff)})
+			sm.erroredRecords = append(sm.erroredRecords, types.ErroredRecord{Err: errs, Data: staff.(Staff)})
 		}
 	}
 	return sm.erroredRecords
@@ -120,6 +130,6 @@ func (sm *StaffManager) SetData(data []types.Data) {
 }
 
 // ShowData - return data structure
-func (sm StaffManager) ShowData() []types.Data {
+func (sm StaffManager) Data() []types.Data {
 	return sm.data
 }
