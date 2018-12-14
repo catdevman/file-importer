@@ -36,8 +36,6 @@ func main() {
 	if err != nil {
 		// This is probably bad
 	}
-	// trace.Start(os.Stdout)
-	// defer trace.Stop()
 	_, err = manager.LoadDataFromReader(bufio.NewReader(file))
 
 	if err != nil {
