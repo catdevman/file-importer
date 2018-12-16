@@ -32,6 +32,7 @@ type StaffManagerSuiteWithErrs struct {
 func (suite *StaffTestSuite) SetupTest() {
 	err := faker.FakeData(&suite.staff)
 	suite.staff.Level = "admin"
+	suite.staff.Role = "staff"
 	if err != nil {
 		panic(err)
 	}
@@ -61,6 +62,7 @@ func (suite *StaffManagerSuite) SetupTest() {
 	for i := 0; i < 10; i++ {
 		err := faker.FakeData(&staff)
 		staff.Level = "admin"
+		staff.Role = "evaluator"
 		if err != nil {
 			panic(err)
 		}

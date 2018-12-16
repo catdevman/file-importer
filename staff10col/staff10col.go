@@ -21,6 +21,11 @@ var LevelValidation = []validation.Rule{
 	validation.Match(regexp.MustCompile(`^(teacher|superintendent|principal|super|admin|[2-4])$`)),
 }
 
+var RoleValidation = []validation.Rule{
+	validation.Required,
+	validation.Match(regexp.MustCompile(`inspect manager|evaluator|observer|student plan manager|staff`)),
+}
+
 // Staff - this is the struct for a staff
 type Staff struct {
 	FirstName    string     `name:"FirstName" json:"firstName" faker:"first_name"`
@@ -51,6 +56,7 @@ func (s Staff) Validate() error {
 		validation.Field(&s.LastName, RequireUnicode...),
 		validation.Field(&s.Username, RequireUnicode...),
 		validation.Field(&s.Level, LevelValidation...),
+		validation.Field(&s.Role, RoleValidation...),
 	)
 }
 
