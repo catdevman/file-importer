@@ -7,6 +7,7 @@ import (
 	"github.com/goFileImporter/file-importer/types"
 	"github.com/yunabe/easycsv"
 	"io"
+	"log"
 	"reflect"
 	"regexp"
 )
@@ -38,6 +39,7 @@ type Staff struct {
 	BuildingCode string     `name:"BuildingCode" json:"buildingCode"`
 	BuildingName string     `name:"BuildingName" json:"buildingName"`
 	Role         string     `name:"Role" json:"role"`
+	action       string
 }
 
 type StaffEmail string
@@ -138,4 +140,31 @@ func (sm *StaffManager) SetData(data []types.Data) {
 // ShowData - return data structure
 func (sm StaffManager) Data() []types.Data {
 	return sm.data
+}
+
+func (sm StaffManager) ProcessData() []error {
+	var errs []error
+	db := sm.dataStore
+	tx, err := db.Begin()
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer tx.Rollback()
+	stmt, err := tx.Prepare("INSERT INTO users(username, email, first_name, last_name, level, user_key) VALUES (?, ?, ?, ?, ?, ?)")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer stmt.Close() // danger!
+	for _, d := range sm.Data() {
+		staff, _ := d.(Staff)
+		_, err = stmt.Exec(staff.Username, staff.Email, staff.FirstName, staff.LastName, staff.Level, staff.SPN)
+		if err != nil {
+			errs = append(errs, err)
+		}
+	}
+	err = tx.Commit()
+	if err != nil {
+		log.Fatal(err)
+	}
+	return errs
 }

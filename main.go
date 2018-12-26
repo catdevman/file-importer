@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"database/sql"
-	"encoding/json"
 	"flag"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
@@ -48,10 +47,9 @@ func main() {
 		errs = validator.ValidateCollection()
 	}
 
-	s, _ := json.Marshal(manager.Data())
-	if s == nil {
-		fmt.Printf("%s\n", s)
-	}
+	sm := manager.(*staff10col.StaffManager)
+	sm.ProcessData()
+
 	if errs != nil {
 		fmt.Println(errs)
 	}

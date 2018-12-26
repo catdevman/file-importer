@@ -1,3 +1,3 @@
 FirstName,LastName,Email,Level,Username,Password,SPN,BuildingCode,BuildingName,Role
-Jane,Doe,jane@doe.com,1,jadoe,password,124,1234,My Building,staff
-John,Doe,john@doe.com,1,jdoe,password,123,1234,My Building,staff
+Jane,Doe,jane@doe.com,2,jadoe,password,124,1234,My Building,staff
+John,Doe,john@doe.com,3,jdoe,password,123,12345,My Building,staff
